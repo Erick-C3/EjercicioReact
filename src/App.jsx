@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
 import Tarjeta from './componentes/Tarjeta.jsx'
+import { ProductoProvider } from './contexto/producto.jsx';
 
-const DEF_TARJETA = <Tarjeta
+/* const DEF_TARJETA = <ProductoProvider>
+  <Tarjeta
   key={"def key"}
   nombre="def producto"
   precio={9999999}
   imagen="def url"
-/>;
+/>
+</ProductoProvider> */
 
 function App() {
-
-  const [productos, setProductos] = useState([DEF_TARJETA]);
+  const [productos, setProductos] = useState(/* DEF_TARJETA */ "DEF PROD");
 
   useEffect(()=>{
     console.log("Effect");
@@ -25,12 +27,14 @@ function App() {
         console.log(productos);
         productos.forEach(producto => {
           tempComponentTarjetas.push(
-            <Tarjeta
-              key={producto.id}
-              nombre={producto.nombre}
-              precio={producto.precio}
-              imagen={producto.imagen}
-            />
+            <ProductoProvider key={"prod-provider-"+producto.id} cantidadInicial={producto.cantidad}>
+              <Tarjeta
+                key={"tarjeta-"+producto.id}
+                nombre={producto.nombre}
+                precio={producto.precio}
+                imagen={producto.imagen}
+              />
+            </ProductoProvider>
           );
         });
         setProductos(tempComponentTarjetas);
