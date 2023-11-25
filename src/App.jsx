@@ -4,6 +4,7 @@ import Tarjeta from './componentes/Tarjeta.jsx'
 import { ProductoProvider } from './contexto/producto.jsx';
 import CarritoMenu from './componentes/CarritoMenu.jsx';
 import IconoCarrito from './iconos/IconoCarrito.jsx';
+import { CarritoProvider } from './contexto/carrito.jsx';
 
 /* const DEF_TARJETA = <ProductoProvider>
   <Tarjeta
@@ -53,7 +54,7 @@ function App() {
 
 
   return (
-    <>
+    <CarritoProvider>
       <CarritoMenu
         key={idApp+"carrito-menu"}
         placement="end"
@@ -62,7 +63,7 @@ function App() {
       <div id='productos'>
         {productos}
       </div>
-    </>
+    </CarritoProvider>
   )
 }
 

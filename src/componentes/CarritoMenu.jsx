@@ -1,25 +1,55 @@
-import { useState } from 'react';
+import { useContext, useEffect, useId, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import "../estilos/CarritoMenu.css"
+import { CarritoContexto } from '../contexto/carrito';
 
 function CarritoMenu({ name, ...props }) {
   const [show, setShow] = useState(false);
+  const carrito = useContext(CarritoContexto);
+  const [productosAgregados, setProdAgregados] = useState(carrito.productos);
+  const idCarrito = useId();
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    setProdAgregados(carrito.productos.map((prod,i) => {
+      return (
+        <li key={idCarrito+"prod"+i}>
+          <ul>
+            <li>{prod.nombre}</li>
+            <li>{prod.precio}</li>
+            <li>{prod.cantidad}</li>
+          </ul>
+        </li>
+      )
+    }));
+  }, [carrito.productos]);
+
+
 
   return (
     <>
       <Button variant="primary" onClick={handleShow} className="me-2">
         {name}
       </Button>
-      <Offcanvas id="carrito-menu" show={show} onHide={handleClose} {...props}>
+      <Offcanvas id="carrito-menu" show={show} onHide={handleClose} {...props}  scroll={true}
+    backdrop={false}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Agregar</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          Some text as placeholder. In real life you can have the elements you
-          have chosen. Like, text, images, lists, etc.
+          <ol>
+            {/* <li>
+              <ul>
+                <li>Nombre</li>
+                <li>Precio</li>
+                <li>Cantidad</li>
+              </ul>
+            </li> */}
+            {productosAgregados}
+          </ol>
         </Offcanvas.Body>
       </Offcanvas>
     </>
