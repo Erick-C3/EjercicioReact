@@ -7,7 +7,7 @@ import { CarritoContexto } from '../contexto/carrito';
 function CarritoMenu({ name, ...props }) {
   const [show, setShow] = useState(false);
   const carrito = useContext(CarritoContexto);
-  const [productosAgregados, setProdAgregados] = useState(carrito.productos);
+  const [productosAgregados, setProdAgregados] = useState(null);
   const idCarrito = useId();
   
   const handleClose = () => setShow(false);
@@ -16,7 +16,7 @@ function CarritoMenu({ name, ...props }) {
   useEffect(() => {
     setProdAgregados(carrito.productos.map((prod,i) => {
       return (
-        <li key={idCarrito+"prod"+i}>
+        <li key={idCarrito+"prod"+i} className='prod-carrito'>
           <ul>
             <li>{prod.nombre}</li>
             <li>{prod.precio}</li>
@@ -48,9 +48,12 @@ function CarritoMenu({ name, ...props }) {
                 <li>Cantidad</li>
               </ul>
             </li> */}
-            {productosAgregados}
+            {carrito.productos.length? productosAgregados:<h2>No hay productos</h2>}
           </ol>
         </Offcanvas.Body>
+        <div id='secc-confirm'>
+          <button className='btn btn-success'>Confirmar</button>
+        </div>
       </Offcanvas>
     </>
   );

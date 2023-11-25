@@ -42,7 +42,7 @@ function Tarjeta({nombre, precio, imagen}) {
         <ListaCantidad
           actualizarSelecc = {setCantSelecc}
         />
-        <Button onClick={agregarProducto} variant="primary">Agregar</Button>
+        <Button disabled={producto.cantidad<=0} onClick={agregarProducto} variant="primary">Agregar</Button>
       </Card.Body>
     </Card>
   );

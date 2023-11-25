@@ -2,16 +2,16 @@ import { createContext, useState } from "react";
 
 export const CarritoContexto = createContext(null);
 
-const DEF_PROD = {
+/* const DEF_PROD = {
     nombre: "defprod",
     precio: 999999,
     cantidad: -1
-}
+} */
 
 
 export function CarritoProvider({children}) {
 
-    const [productos, setProductos] = useState([DEF_PROD]);
+    const [productos, setProductos] = useState([]);
 
     function agregarProducto(nuevoProducto) {
         const posProdRepetido = productos.findIndex((prod)=>{ return prod.nombre === nuevoProducto.nombre});
