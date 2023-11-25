@@ -1,5 +1,4 @@
 body{
   background-color: rgb(145, 187, 145);
-  display: grid;
-  place-content: center;
+  padding: 1rem;
 }
