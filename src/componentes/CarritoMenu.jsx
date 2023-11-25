@@ -19,7 +19,7 @@ function CarritoMenu({ name, ...props }) {
         <li key={idCarrito+"prod"+i} className='prod-carrito'>
           <ul>
             <li>{prod.nombre}</li>
-            <li>{prod.precio}</li>
+            <li>${prod.precio}</li>
             <li>{prod.cantidad}</li>
           </ul>
         </li>
