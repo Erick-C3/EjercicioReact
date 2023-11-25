@@ -14,7 +14,16 @@ export function CarritoProvider({children}) {
     const [productos, setProductos] = useState([DEF_PROD]);
 
     function agregarProducto(nuevoProducto) {
-        setProductos([...productos, nuevoProducto]);
+        const posProdRepetido = productos.findIndex((prod)=>{ return prod.nombre === nuevoProducto.nombre});
+        console.log(posProdRepetido, nuevoProducto, productos);
+        if (posProdRepetido === -1) {
+            setProductos([...productos, nuevoProducto]);
+        }else{
+            setProductos((productosPrev)=>{
+                productosPrev[posProdRepetido].cantidad += nuevoProducto.cantidad;
+                return [...productosPrev]; 
+            });
+        }
     }
 
     return (
