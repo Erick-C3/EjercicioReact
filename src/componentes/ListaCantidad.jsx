@@ -16,7 +16,7 @@ function ListaCantidad(props) {
   },[producto.cantidad]);
 
   return (
-    <Form.Select onChange={(e)=>{ props.actualizarSelecc(parseInt(e.target.value))}} aria-label="Default select example">
+    <Form.Select disabled={!producto.cantidad>0} onChange={(e)=>{ props.actualizarSelecc(parseInt(e.target.value))}} aria-label="Default select example">
       <option>{producto.cantidad>0?"Seleccione":"Sin stock"}</option>
       {opciones}
     </Form.Select>
