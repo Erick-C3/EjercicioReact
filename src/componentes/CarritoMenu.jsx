@@ -2,21 +2,21 @@ import { useContext, useEffect, useId, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import "../estilos/CarritoMenu.css"
-import { CarritoContexto } from '../contexto/carrito';
+import { API_PEDIDO, CarritoContexto } from '../contexto/carrito';
 
 function CarritoMenu({ name, ...props }) {
   const [show, setShow] = useState(false);
   const carrito = useContext(CarritoContexto);
   const [productosAgregados, setProdAgregados] = useState(null);
   const idCarrito = useId();
-  
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    setProdAgregados(carrito.productos.map((prod,i) => {
+    setProdAgregados(carrito.productos.map((prod, i) => {
       return (
-        <li key={idCarrito+"prod"+i} className='prod-carrito'>
+        <li key={idCarrito + "prod" + i} className='prod-carrito'>
           <ul>
             <li>{prod.nombre}</li>
             <li>${prod.precio}</li>
@@ -28,14 +28,35 @@ function CarritoMenu({ name, ...props }) {
   }, [carrito.productos]);
 
 
+  async function confirmarCompra() {
+    try {
+      const info = await fetch(API_PEDIDO, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nombre: "pringles honey mustard",
+          precio: 99999,
+          cantidad: 5,
+          cliente_id: 1
+        })
+      });
+      const res = await info.json();
+      console.log(res);
+    } catch (error) {
+      console.log("error POST: ", error);
+    }
+  }
+
 
   return (
     <>
       <Button variant="primary" onClick={handleShow} className="me-2">
         {name}
       </Button>
-      <Offcanvas id="carrito-menu" show={show} onHide={handleClose} {...props}  scroll={true}
-    backdrop={false}>
+      <Offcanvas id="carrito-menu" show={show} onHide={handleClose} {...props} scroll={true}
+        backdrop={false}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>Agregar</Offcanvas.Title>
         </Offcanvas.Header>
@@ -48,11 +69,11 @@ function CarritoMenu({ name, ...props }) {
                 <li>Cantidad</li>
               </ul>
             </li> */}
-            {carrito.productos.length? productosAgregados:<h2>No hay productos</h2>}
+            {carrito.productos.length ? productosAgregados : <h2>No hay productos</h2>}
           </ol>
         </Offcanvas.Body>
         <div id='secc-confirm'>
-          <button className='btn btn-success'>Confirmar</button>
+          <button onClick={confirmarCompra} className='btn btn-success'>Confirmar</button>
         </div>
       </Offcanvas>
     </>

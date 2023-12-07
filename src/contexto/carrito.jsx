@@ -7,7 +7,7 @@ export const CarritoContexto = createContext(null);
     precio: 999999,
     cantidad: -1
 } */
-
+export const API_PEDIDO = "http://localhost:4000/pedidos";
 
 export function CarritoProvider({children}) {
 
