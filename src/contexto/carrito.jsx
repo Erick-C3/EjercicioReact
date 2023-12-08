@@ -12,6 +12,7 @@ export const API_PEDIDO = "http://localhost:4000/pedidos";
 export function CarritoProvider({children}) {
 
     const [productos, setProductos] = useState([]);
+    const [compraConfirmada, setCompraConfirmada] = useState(false);
 
     function agregarProducto(nuevoProducto) {
         const posProdRepetido = productos.findIndex((prod)=>{ return prod.nombre === nuevoProducto.nombre});
@@ -26,11 +27,18 @@ export function CarritoProvider({children}) {
         }
     }
 
+    function vaciar() {
+        setProductos([]);
+    }
+
     return (
         <CarritoContexto.Provider value={
             {
                 productos,
-                setProductos: agregarProducto
+                setProductos: agregarProducto,
+                compraConfirmada,
+                setCompraConfirmada,
+                vaciar
             }
         }>
             {children}

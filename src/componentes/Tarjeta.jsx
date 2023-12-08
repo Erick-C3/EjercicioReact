@@ -12,6 +12,7 @@ function Tarjeta({nombre, precio, imagen}) {
   const carrito = useContext(CarritoContexto);
 
   function agregarProducto() {
+    carrito.setCompraConfirmada(false);
     producto.setCantidad(producto.cantidad - cantSelecc)
     if (producto.cantidad >0 && cantSelecc) {
       carrito.setProductos({

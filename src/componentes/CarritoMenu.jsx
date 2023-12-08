@@ -9,41 +9,51 @@ function CarritoMenu({ name, ...props }) {
   const carrito = useContext(CarritoContexto);
   const [productosAgregados, setProdAgregados] = useState(null);
   const idCarrito = useId();
-
+  let idCliente = -1;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   useEffect(() => {
-    setProdAgregados(carrito.productos.map((prod, i) => {
-      return (
-        <li key={idCarrito + "prod" + i} className='prod-carrito'>
-          <ul>
-            <li>{prod.nombre}</li>
-            <li>${prod.precio}</li>
-            <li>{prod.cantidad}</li>
-          </ul>
-        </li>
-      )
-    }));
-  }, [carrito.productos]);
+    if (carrito.compraConfirmada) {
+      setProdAgregados([])
+    } else {
+      setProdAgregados(carrito.productos.map((prod, i) => {
+        return (
+          <li key={idCarrito + "prod" + i} className='prod-carrito'>
+            <ul>
+              <li>{prod.nombre}</li>
+              <li>${prod.precio}</li>
+              <li>{prod.cantidad}</li>
+            </ul>
+          </li>
+        )
+      }));
+    }
+  }, [carrito.productos, carrito.compraConfirmada]);
 
 
-  async function confirmarCompra() {
+  function confirmarCompra() {
     try {
-      const info = await fetch(API_PEDIDO, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          nombre: "pringles honey mustard",
-          precio: 99999,
-          cantidad: 5,
-          cliente_id: 1
-        })
-      });
-      const res = await info.json();
-      console.log(res);
+      carrito.productos.forEach(async producto => {
+        const info = await fetch(API_PEDIDO, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: producto.cantidad,
+            cliente_id: idCliente
+          })
+        });
+        const res = await info.json();
+        console.log(info.status);
+        if (info.status === 201) {
+          carrito.setCompraConfirmada(true);
+          carrito.vaciar();
+        }
+      })
     } catch (error) {
       console.log("error POST: ", error);
     }
@@ -69,10 +79,11 @@ function CarritoMenu({ name, ...props }) {
                 <li>Cantidad</li>
               </ul>
             </li> */}
-            {carrito.productos.length ? productosAgregados : <h2>No hay productos</h2>}
+            {carrito.productos.length ? productosAgregados : (carrito.compraConfirmada ? <h2>Gracias por comprar!</h2> : <h2>No hay productos</h2>)}
           </ol>
         </Offcanvas.Body>
         <div id='secc-confirm'>
+          <input onChange={(event) => idCliente = event.target.value} type="number" placeholder='id cliente' />
           <button onClick={confirmarCompra} className='btn btn-success'>Confirmar</button>
         </div>
       </Offcanvas>
